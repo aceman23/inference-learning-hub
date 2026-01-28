@@ -1,0 +1,1145 @@
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scheduler — Hero</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style class="">
+/*
+Sequence animation intro. Usage:
+1) Insert this code in the <head>
+2) Add to Tailwind Classes: [animation:fadeSlideIn_0.5s_ease-out_0.1s_both]
+*/
+@keyframes fadeSlideIn {
+0% {
+opacity: 0;
+transform: translateY(30px);
+filter: blur(8px);
+}
+100% {
+opacity: 1;
+transform: translateY(0);
+filter: blur(0px);
+}
+}
+</style>
+<script>
+/*
+Sequence animation on scroll when visible. Requires Animation Keyframe. Usage:
+1) Insert this code in the <head> along with the Animation Keyframe code.
+2) Add to Tailwind Classes: [animation:fadeSlideIn_0.5s_ease-out_0.1s_both] animate-on-scroll
+*/
+(function () {
+// Inject CSS for paused/running states
+const style = document.createElement("style");
+style.textContent = `
+/* Default: paused */
+.animate-on-scroll { animation-play-state: paused !important; }
+/* Activated by JS */
+.animate-on-scroll.animate { animation-play-state: running !important; }
+`;
+document.head.appendChild(style);
+const once = true;
+if (!window.__inViewIO) {
+window.__inViewIO = new IntersectionObserver((entries) => {
+entries.forEach((entry) => {
+if (entry.isIntersecting) {
+entry.target.classList.add("animate");
+if (once) window.__inViewIO.unobserve(entry.target);
+}
+});
+}, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+}
+window.initInViewAnimations = function (selector = ".animate-on-scroll") {
+document.querySelectorAll(selector).forEach((el) => {
+window.__inViewIO.observe(el); // observing twice is a no-op
+});
+};
+document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
+})();
+</script>
+<style id="aura-editor-visibility-style">
+.invisible { visibility: hidden !important; }
+</style>
+<link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">
+.font-geist { font-family: 'Geist', sans-serif !important; }
+</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">
+.font-roboto { font-family: 'Roboto', sans-serif !important; }
+</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">
+.font-montserrat { font-family: 'Montserrat', sans-serif !important; }
+</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">
+.font-poppins { font-family: 'Poppins', sans-serif !important; }
+</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">
+.font-playfair { font-family: 'Playfair Display', serif !important; }
+</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">
+.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }
+</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">
+.font-merriweather { font-family: 'Merriweather', serif !important; }
+</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">
+.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }
+</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">
+.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }
+</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">
+.font-work-sans { font-family: 'Work Sans', sans-serif !important; }
+</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">
+.font-pt-serif { font-family: 'PT Serif', serif !important; }
+</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">
+.font-geist-mono { font-family: 'Geist Mono', monospace !important; }
+</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">
+.font-space-mono { font-family: 'Space Mono', monospace !important; }
+</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">
+.font-quicksand { font-family: 'Quicksand', sans-serif !important; }
+</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">
+.font-nunito { font-family: 'Nunito', sans-serif !important; }
+</style></head>
+  <body class="antialiased text-slate-900 bg-slate-50" style="font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;">
+    <!-- Background (component) added by Aura -->
+    <div class="aura-background-component top-0 w-full h-screen -z-10 absolute">
+      <div class="aura-background-component top-0 w-full -z-10 absolute h-full">
+        <div data-us-project="ty3N7ZPaIU7KlWixQFIc" class="absolute w-full h-full left-0 top-0 -z-10"></div>
+        <script type="text/javascript">
+          !function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();
+        </script>
+      </div>
+    </div>
+    <!-- Background -->
+    <div class="fixed -z-10 mix-blend-multiply top-0 right-0 bottom-0 left-0">
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-slate-100"></div>
+      <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5b29e34e-9f3d-44f2-b328-fd4771713a34_1600w.webp" alt="" class="absolute inset-x-0 top-[-10%] mx-auto w-[1200px] max-w-none opacity-20 blur-3xl select-none pointer-events-none object-cover">
+      <div class="absolute -top-24 right-[-10%] h-72 w-72 rounded-full bg-gradient-to-tr from-indigo-200 to-sky-200 blur-3xl opacity-70"></div>
+      <div class="bg-gradient-to-tr from-fuchsia-200 to-rose-200 opacity-60 w-72 h-72 rounded-full absolute bottom-0 left-[-10%] blur-3xl"></div>
+    </div>
+
+    <!-- Nav -->
+    <header class="relative z-10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex pt-5 pb-5 items-center justify-between [animation:fadeSlideIn_0.5s_ease-out_0.1s_both] animate-on-scroll animate">
+          <a href="#" class="inline-flex items-center justify-center bg-center w-[140px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/26a2e18f-1e9a-4273-9f82-f86ac5cc7d5b_1600w.png)] bg-cover rounded invert"></a>
+          <nav class="hidden md:flex items-center gap-8 text-sm text-slate-600">
+            <a href="#" class="hover:text-slate-900 transition">Product</a>
+            <a href="#" class="hover:text-slate-900 transition">Solutions</a>
+            <a href="#" class="hover:text-slate-900 transition">Pricing</a>
+            <a href="#" class="hover:text-slate-900 transition">Docs</a>
+          </nav>
+          <div class="flex items-center gap-3">
+            <button class="hidden sm:inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="log-in" class="lucide lucide-log-in h-4 w-4"><path d="m10 17 5-5-5-5"></path><path d="M15 12H3"></path><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path></svg>
+              Sign in
+            </button>
+            <button class="inline-flex hover:bg-black transition text-sm font-medium text-white bg-slate-900 rounded-lg pt-2.5 pr-4 pb-2.5 pl-4 gap-x-2 gap-y-2 items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar" class="lucide lucide-calendar h-4 w-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+              Get started
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="z-10 xl:pb-20 pb-20 relative">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 sm:py-12 lg:py-20 pt-8 pb-8 gap-x-10 gap-y-10 items-center">
+          <!-- Copy -->
+          <div class="">
+            <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-600 shadow-sm [animation:fadeSlideIn_0.5s_ease-out_0.2s_both] animate-on-scroll animate">
+              <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+              New: AI suggestions for smarter scheduling
+            </div>
+            <h1 class="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-slate-900 [animation:fadeSlideIn_0.5s_ease-out_0.3s_both] animate-on-scroll animate">
+              Plan your week with clarity
+            </h1>
+            <p class="mt-4 text-base sm:text-lg text-slate-600 [animation:fadeSlideIn_0.5s_ease-out_0.4s_both] animate-on-scroll animate">
+              A clean, focused calendar that helps teams align, block time, and
+              act on what matters—without the clutter.
+            </p>
+            <div class="mt-6 flex flex-col sm:flex-row gap-3 [animation:fadeSlideIn_0.5s_ease-out_0.5s_both] animate-on-scroll animate">
+              <button class="inline-flex hover:bg-black transition text-sm font-medium text-white bg-slate-900 rounded-xl pt-3 pr-5 pb-3 pl-5 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] gap-x-2 gap-y-2 items-center justify-center">
+                Start free
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </button>
+              <button class="inline-flex gap-2 hover:bg-slate-50 transition text-sm font-medium text-slate-900 bg-white rounded-xl pt-3 pr-5 pb-3 pl-5 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] gap-x-2 gap-y-2 items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="play" class="lucide lucide-play h-4 w-4"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
+                Watch demo
+              </button>
+            </div>
+
+            <div class="mt-8 flex items-center gap-4 [animation:fadeSlideIn_0.5s_ease-out_0.6s_both] animate-on-scroll animate">
+              <div class="flex -space-x-3">
+                <img class="h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ff011286-28d0-42f1-9e8f-9bffe0a9edf7_320w.webp" alt="">
+                <img class="h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f0d70bb8-0ddf-4ff2-9227-d94dc46ef062_320w.webp" alt="">
+                <img class="h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/81a14d03-8b28-415a-b8d8-bf76b3206731_320w.webp" alt="">
+                <img class="h-8 w-8 rounded-full ring-2 ring-white object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5b29e34e-9f3d-44f2-b328-fd4771713a34_320w.webp" alt="">
+              </div>
+              <p class="text-sm text-slate-600">
+                Trusted by product teams worldwide
+              </p>
+            </div>
+          </div>
+
+          <!-- Mockup -->
+          <div class="relative">
+            <!-- Card -->
+            <div class="[animation:fadeSlideIn_0.5s_ease-out_0.5s_both] animate-on-scroll animate bg-white w-full max-w-2xl ring-black/5 ring-1 rounded-3xl mr-auto ml-auto relative shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]">
+              <!-- Top bar -->
+              <div class="flex items-center justify-between border-b border-slate-100 px-5 sm:px-6 py-4">
+                <div class="flex items-center gap-2 text-slate-500">
+                  <button class="p-1.5 rounded-md hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-left" class="lucide lucide-chevron-left h-4 w-4"><path d="m15 18-6-6 6-6"></path></svg>
+                  </button>
+                  <span class="text-sm">May 2020</span>
+                  <button class="p-1.5 rounded-md hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" class="lucide lucide-chevron-right h-4 w-4"><path d="m9 18 6-6-6-6"></path></svg>
+                  </button>
+                </div>
+                <div class="hidden sm:flex items-center gap-3 w-72">
+                  <div class="relative w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search absolute left-3 top-2.5 h-4 w-4 text-slate-400"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                    <input type="text" placeholder="Search for events" class="w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-300">
+                  </div>
+                  <img class="h-8 w-8 rounded-full object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8dff104c-a210-4477-afa4-4c0d1b81d5ff_320w.webp" alt="">
+                </div>
+              </div>
+
+              <!-- Content -->
+              <div class="grid grid-cols-12">
+                <!-- Sidebar -->
+                <aside class="col-span-4 sm:col-span-3 border-slate-100 border-r">
+                  <div class="sm:pl-3 pt-5 pr-3 pb-5 pl-3">
+                    <h3 class="text-lg sm:text-xl font-medium tracking-tight text-slate-900">
+                      This Week
+                    </h3>
+
+                    <!-- Day list -->
+                    <div class="mt-4 space-y-3">
+                      <div class="rounded-xl border border-slate-200 p-2 sm:p-3">
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center gap-2 sm:gap-3">
+                            <div class="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-slate-900 text-white text-xs sm:text-sm font-medium">
+                              W
+                            </div>
+                            <div>
+                              <p class="text-xs sm:text-sm font-medium">27th</p>
+                              <p class="text-[10px] sm:text-xs text-slate-500">
+                                Today
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-2 sm:mt-3 space-y-1 sm:space-y-2 text-[11px] sm:text-[13px]">
+                          <div class="flex items-center gap-1.5 sm:gap-2">
+                            <span class="h-1.5 w-1.5 rounded-full bg-sky-500 shrink-0"></span>
+                            <span class="truncate">
+                              Grooming first sketches
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-1.5 sm:gap-2 text-slate-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" class="lucide lucide-clock h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                            <span class="">9:30 – 10:30</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="rounded-xl border border-slate-200 p-2 sm:p-3">
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                          <span class="h-1.5 w-1.5 rounded-full bg-indigo-500 shrink-0"></span>
+                          <span class="truncate text-[11px] sm:text-sm">
+                            Design discussion
+                          </span>
+                        </div>
+                        <p class="mt-1 text-[11px] sm:text-[13px] text-slate-500">
+                          11:00 – 12:30
+                        </p>
+                      </div>
+
+                      <div class="rounded-xl border border-slate-200 p-2 sm:p-3">
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0"></span>
+                          <span class="truncate text-[11px] sm:text-sm">
+                            One to one with Silvia
+                          </span>
+                        </div>
+                        <p class="mt-1 text-[11px] sm:text-[13px] text-rose-500">
+                          Begins in 45m
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </aside>
+
+                <!-- Main day view -->
+                <main class="col-span-8 sm:col-span-9">
+                  <div class="px-3 sm:px-6 py-5">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-lg sm:text-xl font-medium tracking-tight text-slate-900">
+                        Mon, 27th
+                      </h3>
+                      <div class="flex items-center gap-2 text-slate-500">
+                        <button class="p-1.5 rounded-md hover:bg-slate-100">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-left" class="lucide lucide-chevron-left h-4 w-4"><path d="m15 18-6-6 6-6"></path></svg>
+                        </button>
+                        <button class="p-1.5 rounded-md hover:bg-slate-100">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" class="lucide lucide-chevron-right h-4 w-4"><path d="m9 18 6-6-6-6"></path></svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Time grid -->
+                    <div class="mt-4 relative">
+                      <div class="grid grid-cols-1">
+                        <div class="relative">
+                          <!-- Hours -->
+                          <div class="grid grid-rows-6 gap-3 sm:gap-6 text-[10px] sm:text-[11px] text-slate-400">
+                            <div class="relative pl-10 sm:pl-14">
+                              <span class="absolute left-0 top-0">10:00</span>
+                              <div class="h-px w-full bg-slate-100"></div>
+                            </div>
+                            <div class="relative pl-10 sm:pl-14">
+                              <span class="absolute left-0 top-0">11:00</span>
+                              <div class="h-px w-full bg-slate-100"></div>
+                            </div>
+                            <div class="relative pl-10 sm:pl-14">
+                              <span class="absolute left-0 top-0">12:00</span>
+                              <div class="h-px w-full bg-slate-100"></div>
+                            </div>
+                            <div class="relative pl-10 sm:pl-14">
+                              <span class="absolute left-0 top-0">13:00</span>
+                              <div class="h-px w-full bg-slate-100"></div>
+                            </div>
+                            <div class="relative pl-10 sm:pl-14">
+                              <span class="absolute left-0 top-0">14:00</span>
+                              <div class="h-px w-full bg-slate-100"></div>
+                            </div>
+                            <div class="relative pl-10 sm:pl-14">
+                              <span class="absolute left-0 top-0">15:00</span>
+                              <div class="h-px w-full bg-slate-100"></div>
+                            </div>
+                          </div>
+
+                          <!-- Event blocks -->
+                          <div class="absolute inset-0">
+                            <div class="absolute left-12 sm:left-16 right-2 sm:right-4 top-[14%] h-20 sm:h-24 rounded-xl border-2 border-dashed border-sky-200 bg-sky-50/60 shadow-sm">
+                              <div class="p-2 sm:p-3">
+                                <p class="text-xs sm:text-sm font-medium truncate">
+                                  Design discussion
+                                </p>
+                                <p class="text-[10px] sm:text-[12px] text-slate-500">
+                                  11:00 – 12:30
+                                </p>
+                                <div class="mt-1 sm:mt-2 flex -space-x-1.5 sm:-space-x-2">
+                                  <img class="h-5 w-5 sm:h-6 sm:w-6 rounded-full ring-2 ring-white object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/95de6b39-0881-4e57-a835-d5b11821be6f_320w.webp" alt="">
+                                  <img class="h-5 w-5 sm:h-6 sm:w-6 rounded-full ring-2 ring-white object-cover" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6cece196-f0bf-472f-b752-67bc4ff893c8_320w.webp" alt="">
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="absolute left-12 sm:left-16 right-8 sm:right-24 top-[56%] h-16 sm:h-20 rounded-xl bg-amber-50 shadow-sm ring-1 ring-amber-100">
+                              <div class="p-2 sm:p-3">
+                                <p class="text-xs sm:text-sm font-medium truncate">
+                                  One to one with Silvia
+                                </p>
+                                <p class="text-[10px] sm:text-[12px] text-slate-500">
+                                  13:45 – 15:00
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </main>
+              </div>
+
+              <!-- Floating dark panel - Desktop only, stacks on mobile -->
+              <div class="md:absolute md:-right-8 md:top-16 md:w-[420px] md:mt-0 md:mx-0 md:mb-0 ring-white/10 ring-1 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]] text-slate-100 bg-slate-900 rounded-3xl mt-0 mr-4 mb-0 ml-4">
+  <div class="sm:p-6 pt-4 pr-4 pb-4 pl-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 sm:gap-6 sm:pb-4 sm:pt-0 pt-1 pb-4 gap-x-4 gap-y-4">
+      <div class="">
+        <label class="text-xs text-slate-400">Title</label>
+        <div class="mt-2">
+          <div class="relative">
+            <input type="text" value="Design discussion" class="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-white/10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="edit-3" class="lucide lucide-edit-3 absolute right-3 top-2.5 h-4 w-4 text-slate-400"><path d="M13 21h8"></path><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-xs text-slate-400">Repeat</label>
+          <button class="mt-2 w-full inline-flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm">
+                          None
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down h-4 w-4 text-slate-400"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-xs text-slate-400">Alert</label>
+          <button class="mt-2 w-full inline-flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm">
+                          None
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" class="lucide lucide-chevron-down h-4 w-4 text-slate-400"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-xs text-slate-400">Guests</label>
+          <div class="mt-2 flex items-center gap-2">
+            <div class="flex -space-x-2">
+              <img class="h-7 w-7 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80" alt="">
+              <img class="h-7 w-7 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&amp;q=80" alt="">
+              <img class="h-7 w-7 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1635151227785-429f420c6b9d?w=1080&amp;q=80" alt="">
+            </div>
+            <button class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 hover:bg-white/15 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus h-4 w-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                          </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dial -->
+      <div class="flex flex-col">
+        <label class="text-xs text-slate-400">When</label>
+        <div class="mt-3 relative flex items-center justify-center">
+          <div class="relative h-36 w-36 sm:h-44 sm:w-44">
+            <!-- Outer animated ring -->
+            <div class="absolute inset-0 rounded-full" style="background: conic-gradient(#0ea5e9 0deg, #0ea5e9 120deg, #111827 120deg, #111827 180deg, #f59e0b 180deg, #f59e0b 300deg, #111827 300deg); filter: drop-shadow(0 6px 20px rgba(0,0,0,0.25));">
+            </div>
+            <!-- Middle mask -->
+            <div class="absolute inset-2 rounded-full bg-slate-900"></div>
+            <!-- Tick marks -->
+            <div class="absolute inset-0">
+              <div class="absolute left-1/2 bottom-0 h-2 sm:h-3 w-0.5 -translate-x-1/2 rounded bg-white/20"></div>
+            </div>
+            <!-- Inner content -->
+            <div class="absolute inset-4 sm:inset-5 rounded-full bg-slate-800 ring-1 ring-white/10 flex flex-col items-center justify-center text-center">
+              <div class="text-[10px] sm:text-xs text-slate-400">
+                11:00
+              </div>
+              <div class="mt-0.5 sm:mt-1 text-base sm:text-lg font-medium">
+                till 12:30
+              </div>
+            </div>
+
+            <!-- Handles -->
+          </div>
+        </div>
+
+        <div class="mt-3 sm:mt-4 flex items-center justify-between text-xs text-slate-400">
+          <span class="">
+                          From
+                          <span class="text-slate-200">11:00</span>
+          </span>
+          <span class="">
+                          Till
+                          <span class="text-slate-200">12:30</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 mt-4 sm:mt-0 sm:px-6 py-4">
+      <button class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-white text-slate-900 px-4 py-2.5 text-sm font-medium hover:bg-slate-100 transition">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="save" class="lucide lucide-save h-4 w-4"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path><path d="M7 3v4a1 1 0 0 0 1 1h7"></path></svg>
+                      Save Event
+                    </button>
+    </div>
+  </div>
+</div>
+            </div>
+
+            <!-- Floating add button on card corner -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="z-10 relative" id="process">
+      <div class="w-full">
+        <div class="sm:px-8 sm:py-16 lg:py-20 text-slate-100 bg-slate-900 w-full ring-white/10 ring-1 pt-12 pr-5 pb-12 pl-5">
+          <div class="mx-auto max-w-3xl text-center">
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300 [animation:fadeSlideIn_0.5s_ease-out_0.1s_both] animate-on-scroll">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="workflow" class="lucide lucide-workflow h-3.5 w-3.5"><rect width="8" height="8" x="3" y="3" rx="2"></rect><path d="M7 11v4a2 2 0 0 0 2 2h4"></path><rect width="8" height="8" x="13" y="13" rx="2"></rect></svg>
+              Our Process
+            </span>
+            <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight [animation:fadeSlideIn_0.5s_ease-out_0.2s_both] animate-on-scroll">
+              A clear path from chaos to a calm calendar
+            </h2>
+            <p class="mt-4 text-sm sm:text-base text-slate-300 [animation:fadeSlideIn_0.5s_ease-out_0.3s_both] animate-on-scroll">
+              We audit, auto-schedule, and align your team so everyone gets more
+              focus time and fewer conflicts.
+            </p>
+          </div>
+
+          <div class="mt-10 lg:mt-14 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            <!-- Step 1 -->
+            <div class="rounded-2xl ring-1 ring-white/10 bg-white/5 p-6 sm:p-8 [animation:fadeSlideIn_0.5s_ease-out_0.4s_both] animate-on-scroll">
+              <span class="inline-flex text-[11px] items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-slate-300">
+                Step 1
+              </span>
+              <h3 class="mt-3 text-xl sm:text-2xl font-semibold tracking-tight">
+                Calendar Intake
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                We connect your sources and capture preferences to map how your
+                team actually works.
+              </p>
+
+              <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="rounded-lg bg-slate-800 ring-1 ring-white/10 p-4">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-slate-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar" class="lucide lucide-calendar h-4.5 w-4.5"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                      <span class="text-sm font-medium">Calendars</span>
+                    </div>
+                    <span class="text-xs text-slate-400">3 linked</span>
+                  </div>
+                  <div class="mt-3 flex items-center gap-2 text-xs text-slate-300">
+                    <span class="inline-flex items-center gap-1 rounded-md bg-slate-700/70 px-2 py-1">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                      Work
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-md bg-slate-700/70 px-2 py-1">
+                      <span class="h-1.5 w-1.5 rounded-full bg-indigo-400"></span>
+                      Personal
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-md bg-slate-700/70 px-2 py-1">
+                      <span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span>
+                      Team
+                    </span>
+                  </div>
+                </div>
+
+                <div class="rounded-lg bg-slate-800 ring-1 ring-white/10 p-4">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-slate-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock" class="lucide lucide-clock h-4.5 w-4.5"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                      <span class="text-sm font-medium">Work hours</span>
+                    </div>
+                    <span class="text-xs text-emerald-300">9:30–17:30</span>
+                  </div>
+                  <ul class="mt-3 space-y-2 text-xs text-slate-300">
+                    <li class="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/200/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" class="lucide lucide-check-circle h-3.5 w-3.5 text-emerald-400"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+                      No meetings Tue/Thu 1–3pm
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="target" class="lucide lucide-target h-3.5 w-3.5 text-sky-400"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                      2 focus blocks per day
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="rounded-2xl ring-1 ring-white/10 bg-white/5 p-6 sm:p-8 [animation:fadeSlideIn_0.5s_ease-out_0.5s_both] animate-on-scroll">
+              <span class="inline-flex text-[11px] items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-slate-300">
+                Step 2
+              </span>
+              <h3 class="mt-3 text-xl sm:text-2xl font-semibold tracking-tight">
+                AI Scheduling
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                Our engine proposes an optimal plan that respects priorities,
+                time zones, and deep work.
+              </p>
+
+              <div class="bg-slate-800 ring-white/10 ring-1 rounded-lg mt-5 pt-4 pr-4 pb-4 pl-4">
+                <div class="flex items-center justify-between text-xs text-slate-400">
+                  <span class="inline-flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wand-2" class="lucide lucide-wand-2 h-3.5 w-3.5"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"></path><path d="m14 7 3 3"></path><path d="M5 6v4"></path><path d="M19 14v4"></path><path d="M10 2v2"></path><path d="M7 8H3"></path><path d="M21 16h-4"></path><path d="M11 3H9"></path></svg>
+                    Smart Plan v2.1
+                  </span>
+                  <span>Week 42</span>
+                </div>
+                <div class="mt-3 grid grid-cols-7 gap-1">
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-2 rounded bg-indigo-400/80 w-full"></div>
+                    <div class="h-3 rounded bg-emerald-400/80 w-full"></div>
+                  </div>
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-3 rounded bg-amber-400/80 w-full"></div>
+                  </div>
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-2.5 rounded bg-sky-400/80 w-full"></div>
+                    <div class="h-2 rounded bg-rose-400/80 w-full"></div>
+                  </div>
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-2 rounded bg-emerald-400/80 w-full"></div>
+                  </div>
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-3 rounded bg-indigo-400/80 w-full"></div>
+                    <div class="h-2 rounded bg-amber-400/80 w-full"></div>
+                  </div>
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-2 rounded bg-sky-400/80 w-full"></div>
+                  </div>
+                  <div class="h-14 rounded-md bg-slate-700/60 relative flex flex-col justify-end p-1 gap-0.5">
+                    <div class="h-3 rounded bg-emerald-400/80 w-full"></div>
+                  </div>
+                </div>
+                <div class="mt-3 flex items-center justify-between text-xs">
+                  <span class="text-emerald-300">+8.7h focus time</span>
+                  <span class="text-slate-400">3 conflicts resolved</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="rounded-2xl ring-1 ring-white/10 bg-white/5 p-6 sm:p-8 [animation:fadeSlideIn_0.5s_ease-out_0.6s_both] animate-on-scroll">
+              <span class="inline-flex text-[11px] items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-slate-300">
+                Step 3
+              </span>
+              <h3 class="mt-3 text-xl sm:text-2xl font-semibold tracking-tight">
+                Team Review
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                Share the draft, collect feedback, and lock plans with one
+                click.
+              </p>
+
+              <div class="mt-5 rounded-lg bg-slate-800 ring-1 ring-white/10 p-4">
+                <div class="flex items-center gap-2 text-xs text-slate-300">
+                  <div class="flex -space-x-2">
+                    <img class="ring-2 ring-slate-800 w-7 h-7 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/bb8589c5-e897-4621-8d44-3d8f2ce3fccc_320w.webp" alt="">
+                    <img class="w-7 h-7 object-cover ring-slate-800 ring-2 rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5b29e34e-9f3d-44f2-b328-fd4771713a34_320w.webp" alt="">
+                    <img class="w-7 h-7 object-cover ring-slate-800 ring-2 rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b432539e-c2e6-4226-b552-a6f99c1c3465_320w.webp" alt="">
+                  </div>
+                  <span class="text-slate-400">4 reviewers</span>
+                </div>
+
+                <div class="mt-3 space-y-2">
+                  <div class="flex items-start gap-2 text-xs">
+                    <span class="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                    <p class="text-slate-200">
+                      <span class="text-slate-400">Maya:</span>
+                      Approve — ship Wednesday afternoon.
+                    </p>
+                  </div>
+                  <div class="flex items-start gap-2 text-xs">
+                    <span class="mt-1 h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                    <p class="text-slate-200">
+                      <span class="text-slate-400">Evan:</span>
+                      Shift standup to 9:45 for EMEA overlap.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                  <button class="inline-flex items-center gap-2 rounded-lg bg-white text-slate-900 px-3 py-2 text-xs font-medium hover:bg-slate-100 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" class="lucide lucide-shield-check h-3.5 w-3.5"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    Approve Plan
+                  </button>
+                  <span class="text-xs text-slate-400">2 changes queued</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="sm:p-8 bg-white/5 ring-white/10 ring-1 rounded-2xl pt-6 pr-6 pb-6 pl-6 [animation:fadeSlideIn_0.5s_ease-out_0.7s_both] animate-on-scroll">
+              <span class="inline-flex text-[11px] items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-slate-300">
+                Step 4
+              </span>
+              <h3 class="mt-3 text-lg sm:text-2xl font-semibold tracking-tight">
+                Continuous Learn
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                We monitor outcomes and tune the model so your schedule keeps
+                getting better.
+              </p>
+
+              <div class="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
+                <div class="rounded-lg bg-slate-800 ring-1 ring-white/10 p-3 sm:p-4 text-center">
+                  <div class="text-xl sm:text-2xl font-semibold tracking-tight text-white">
+                    -43%
+                  </div>
+                  <div class="mt-1 text-[10px] sm:text-[11px] text-slate-400">
+                    Meeting overlap
+                  </div>
+                </div>
+                <div class="rounded-lg bg-slate-800 ring-1 ring-white/10 p-3 sm:p-4 text-center">
+                  <div class="text-xl sm:text-2xl font-semibold tracking-tight text-white">
+                    +12.4h
+                  </div>
+                  <div class="mt-1 text-[10px] sm:text-[11px] text-slate-400">
+                    Focus time / wk
+                  </div>
+                </div>
+                <div class="rounded-lg bg-slate-800 ring-1 ring-white/10 p-3 sm:p-4 text-center">
+                  <div class="text-xl sm:text-2xl font-semibold tracking-tight text-white">
+                    96%
+                  </div>
+                  <div class="mt-1 text-[10px] sm:text-[11px] text-slate-400">
+                    Plan adoption
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-2 text-xs text-slate-300 mt-4 gap-x-2 gap-y-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" class="lucide lucide-sparkles h-3 w-3 sm:h-3.5 sm:w-3.5"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+                <span class="text-[11px] sm:text-xs">
+                  Model refresh every Monday at 08:00
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom CTA -->
+          <div class="mt-10 lg:mt-14 flex flex-col sm:flex-row items-center justify-center gap-3 [animation:fadeSlideIn_0.5s_ease-out_0.8s_both] animate-on-scroll">
+            <button class="inline-flex hover:bg-white/90 transition text-sm font-medium text-slate-900 bg-white rounded-xl pt-3 pr-5 pb-3 pl-5 items-center gap-2">
+              Start free
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </button>
+            <button class="inline-flex gap-2 hover:bg-white/10 transition text-sm font-medium text-white bg-white/5 rounded-xl pt-3 pr-5 pb-3 pl-5 ring-1 ring-white/10 items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="play" class="lucide lucide-play h-4 w-4"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
+              See how it works
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="relative z-10" id="about">
+      <div class="mt-20 mb-20 w-full">
+        <div class="sm:px-8 sm:py-16 lg:py-20 text-slate-900 w-full pt-12 pr-5 pb-12 pl-5">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mx-auto max-w-7xl">
+            <div class="[animation:fadeSlideIn_0.5s_ease-out_0.1s_both] animate-on-scroll">
+              <figure class="rounded-2xl overflow-hidden ring-1 ring-slate-900/10 bg-slate-100">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7aa6b155-1e13-43fb-80d9-eb5c31d2bfef_1600w.webp" alt="People collaborating in a calm session" class="w-full h-full object-cover">
+              </figure>
+            </div>
+
+            <div class="[animation:fadeSlideIn_0.5s_ease-out_0.2s_both] animate-on-scroll">
+              <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkle" class="lucide lucide-sparkle h-3.5 w-3.5"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path></svg>
+                About Scheduler
+              </span>
+              <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
+                Stronger teams, calmer weeks.
+              </h2>
+              <p class="mt-4 text-sm sm:text-base text-slate-600">
+                We help product and ops teams protect focus, reduce meeting
+                drag, and align across time zones. Clear priorities, fewer
+                conflicts, and a rhythm your team can trust.
+              </p>
+
+              <div class="mt-6">
+                <button class="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium bg-slate-900 text-white hover:bg-black transition shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]">
+                  Learn more
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </button>
+              </div>
+
+              <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                <div class="rounded-2xl bg-slate-50 ring-1 ring-slate-900/10 p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="">
+                      <p class="text-base font-medium tracking-tight">
+                        Privacy‑first
+                      </p>
+                      <p class="mt-1 text-[11px] text-slate-600">
+                        SOC 2 Type II • AES‑256 at rest
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl bg-slate-50 ring-1 ring-slate-900/10 p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="">
+                      <p class="text-base font-medium tracking-tight">
+                        Inclusive by design
+                      </p>
+                      <p class="mt-1 text-[11px] text-slate-600">
+                        Works across 12 time zones
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rounded-2xl bg-slate-50 ring-1 ring-slate-900/10 p-4">
+                  <div class="flex items-center gap-3">
+                    <div class="">
+                      <p class="text-base font-medium tracking-tight">
+                        Cost‑smart
+                      </p>
+                      <p class="mt-1 text-[11px] text-slate-600">
+                        27% fewer meeting hours on avg.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex items-center gap-4 text-xs text-slate-600">
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                  99.97% uptime
+                </div>
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                  18k+ weekly active users
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><section class="relative z-10" id="pricing">
+  <div class="w-full mt-20 mb-20">
+    <div class="sm:px-8 sm:py-16 lg:py-20 text-slate-900 w-full pt-12 pr-5 pb-12 pl-5">
+      <div class="mx-auto max-w-7xl">
+        <!-- Header -->
+        <div class="mx-auto max-w-3xl text-center">
+          <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600 shadow-sm [animation:fadeSlideIn_0.5s_ease-out_0.1s_both] animate-on-scroll">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+            Simple, transparent pricing
+          </span>
+          <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight [animation:fadeSlideIn_0.5s_ease-out_0.2s_both] animate-on-scroll">
+            Plans that scale with your team
+          </h2>
+          <p class="mt-4 text-sm sm:text-base text-slate-600 [animation:fadeSlideIn_0.5s_ease-out_0.3s_both] animate-on-scroll">
+            Start free, upgrade when you need more power. All plans include our core scheduling engine.
+          </p>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          <!-- Starter -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm [animation:fadeSlideIn_0.5s_ease-out_0.4s_both] animate-on-scroll">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-semibold tracking-tight">Starter</h3>
+              <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                Free
+              </span>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">
+              Perfect for individuals and small teams getting started.
+            </p>
+            <div class="mt-6">
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-semibold tracking-tight">$0</span>
+                <span class="text-sm text-slate-600">/month</span>
+              </div>
+            </div>
+            <button class="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium bg-slate-100 text-slate-900 hover:bg-slate-200 transition">
+              Get started
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </button>
+            <ul class="mt-8 space-y-3 text-sm">
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Up to 3 calendars</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Basic AI suggestions</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Mobile &amp; desktop apps</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">1 time zone</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Pro (Featured) -->
+          <div class="rounded-2xl border-2 border-slate-900 bg-white p-6 sm:p-8 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06)] relative [animation:fadeSlideIn_0.5s_ease-out_0.5s_both] animate-on-scroll">
+            <div class="absolute -top-4 left-0 right-0 flex justify-center">
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-xs font-medium text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path></svg>
+                Most popular
+              </span>
+            </div>
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-semibold tracking-tight">Pro</h3>
+              <span class="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                Best value
+              </span>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">
+              For teams that need advanced AI and collaboration features.
+            </p>
+            <div class="mt-6">
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-semibold tracking-tight">$12</span>
+                <span class="text-sm text-slate-600">/user/month</span>
+              </div>
+              <p class="mt-1 text-xs text-slate-500">Billed annually or $15/month</p>
+            </div>
+            <button class="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium bg-slate-900 text-white hover:bg-black transition shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06)]">
+              Start free trial
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </button>
+            <ul class="mt-8 space-y-3 text-sm">
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Unlimited calendars</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Advanced AI scheduling</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Team review &amp; approval</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">12 time zones</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Analytics &amp; insights</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Priority support</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm [animation:fadeSlideIn_0.5s_ease-out_0.6s_both] animate-on-scroll">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-semibold tracking-tight">Enterprise</h3>
+              <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                Custom
+              </span>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">
+              For organizations with advanced security and compliance needs.
+            </p>
+            <div class="mt-6">
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-semibold tracking-tight">Custom</span>
+              </div>
+              <p class="mt-1 text-xs text-slate-500">Contact us for pricing</p>
+            </div>
+            <button class="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium bg-slate-100 text-slate-900 hover:bg-slate-200 transition">
+              Contact sales
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </button>
+            <ul class="mt-8 space-y-3 text-sm">
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Everything in Pro</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">SSO &amp; SAML</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Custom integrations</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">Dedicated account manager</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">99.99% SLA</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-slate-900 shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span class="text-slate-600">On-premise deployment option</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-xs text-slate-600 [animation:fadeSlideIn_0.5s_ease-out_0.7s_both] animate-on-scroll">
+          <div class="inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-emerald-600"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            <span class="">14-day free trial</span>
+          </div>
+          <div class="inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-emerald-600"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            <span>No credit card required</span>
+          </div>
+          <div class="inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-emerald-600"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            <span>Cancel anytime</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><section class="relative z-10" id="cta">
+  <div class="w-full mt-20 mb-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="rounded-3xl bg-slate-900 text-white p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] [animation:fadeSlideIn_0.5s_ease-out_0.2s_both] animate-on-scroll">
+        <!-- Background decoration -->
+        <div class="absolute inset-0 opacity-10">
+          <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-br from-white to-slate-300 blur-3xl"></div>
+          <div class="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-gradient-to-tr from-white to-slate-300 blur-3xl"></div>
+        </div>
+
+        <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div class="">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
+              Ready to reclaim your calendar?
+            </h2>
+            <p class="mt-4 text-base sm:text-lg text-slate-300">
+              Join 18,000+ teams already saving 12+ hours per week with smarter scheduling.
+            </p>
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <button class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-medium bg-white text-slate-900 hover:bg-slate-100 transition shadow-lg">
+                Start free trial
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </button>
+              <button class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition ring-1 ring-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                Book a demo
+              </button>
+            </div>
+            <div class="mt-6 flex items-center gap-6 text-sm text-slate-400">
+              <div class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-emerald-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span>Free for 14 days</span>
+              </div>
+              <div class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-emerald-400"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span>No credit card needed</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-white/20 p-6">
+              <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+                <div class="flex -space-x-2">
+                  <img class="w-8 h-8 object-cover ring-slate-900 ring-2 rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9e6e6cbe-3fd8-4ddf-8c83-5b3cf071500e_320w.webp" alt="">
+                  <img class="w-8 h-8 object-cover ring-slate-900 ring-2 rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/288eb1de-b7ea-4a25-8a5c-dee0646f850d_320w.webp" alt="">
+                  <img class="ring-2 ring-slate-900 w-8 h-8 object-cover rounded-full" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/097da8f2-4a13-4733-9db6-7ec925c5b913_320w.webp" alt="">
+                </div>
+                <div>
+                  <p class="text-sm font-medium">Product Team</p>
+                  <p class="text-xs text-slate-400">8 members active</p>
+                </div>
+              </div>
+              <div class="mt-4 space-y-3">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-300">This week's focus time</span>
+                  <span class="font-medium text-emerald-400">+12.4 hours</span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-300">Conflicts resolved</span>
+                  <span class="font-medium text-emerald-400">18</span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-300">Meeting efficiency</span>
+                  <span class="font-medium text-emerald-400">96%</span>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-white/10">
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                  <span>Auto-scheduled 34 events this week</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><footer class="relative z-10 border-t border-slate-200 bg-white">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+      <!-- Brand -->
+      <div class="col-span-2">
+        <a href="#" class="inline-flex items-center justify-center bg-center w-[140px] h-[40px] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/26a2e18f-1e9a-4273-9f82-f86ac5cc7d5b_1600w.png)] bg-cover rounded invert"></a>
+        <p class="mt-4 text-sm text-slate-600 max-w-xs">
+          Smart scheduling for teams that value focus, clarity, and time well spent.
+        </p>
+        <div class="mt-6 flex items-center gap-4">
+          <a href="#" class="text-slate-400 hover:text-slate-900 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+          </a>
+          <a href="#" class="text-slate-400 hover:text-slate-900 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <a href="#" class="text-slate-400 hover:text-slate-900 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900">Product</h3>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Features</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Integrations</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Pricing</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Changelog</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Roadmap</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900">Company</h3>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">About</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Blog</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Careers</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Press</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900">Resources</h3>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Documentation</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">API Reference</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Help Center</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Community</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Status</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h3 class="text-sm font-semibold text-slate-900">Legal</h3>
+        <ul class="mt-4 space-y-3 text-sm">
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Privacy</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Terms</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Security</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">Compliance</a></li>
+          <li><a href="#" class="text-slate-600 hover:text-slate-900 transition">GDPR</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-slate-600">
+        © 2024 Scheduler. All rights reserved.
+      </p>
+      <div class="flex items-center gap-4 text-xs text-slate-600">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          All systems operational
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      });
+    </script>
+  
+</body></html>

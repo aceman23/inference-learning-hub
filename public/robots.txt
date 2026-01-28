@@ -1,0 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /course
+Disallow: /settings
+Disallow: /payment
+Disallow: /payment-success
+Disallow: /certificate
+
+Sitemap: https://learnhub.com/sitemap.xml
