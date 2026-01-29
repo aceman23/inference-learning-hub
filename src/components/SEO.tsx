@@ -18,7 +18,7 @@ export default function SEO({
   structuredData,
 }: SEOProps) {
   useEffect(() => {
-    document.title = `${title} | LearnHub`;
+    document.title = `${title} | by Inference Learning Hub`;
 
     const updateMetaTag = (name: string, content: string, isProperty = false) => {
       const attribute = isProperty ? 'property' : 'name';
@@ -32,12 +32,12 @@ export default function SEO({
     };
 
     updateMetaTag('description', description);
-    updateMetaTag('og:title', `${title} | LearnHub`, true);
+    updateMetaTag('og:title', `${title} | by Inference Learning Hub`, true);
     updateMetaTag('og:description', description, true);
     updateMetaTag('og:type', type, true);
     updateMetaTag('og:image', ogImage, true);
     updateMetaTag('twitter:card', 'summary_large_image');
-    updateMetaTag('twitter:title', `${title} | LearnHub`);
+    updateMetaTag('twitter:title', `${title} | by Inference Learning Hub`);
     updateMetaTag('twitter:description', description);
     updateMetaTag('twitter:image', ogImage);
 

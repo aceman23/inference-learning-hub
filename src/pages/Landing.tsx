@@ -24,12 +24,18 @@ export const Landing: React.FC = () => {
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'EducationalOrganization',
-    name: 'LearnHub',
-    description: 'Professional online learning platform offering interactive courses with quizzes, exercises, and certificates',
+    '@type': 'Course',
+    name: 'Disaggregated Inference Course: Master LLM Serving Optimization',
+    description: 'Master disaggregated inference and LLM serving optimization techniques. Comprehensive course covering prefill-decode disaggregation, KV cache management, and distributed serving strategies.',
+    provider: {
+      '@type': 'EducationalOrganization',
+      name: 'Inference Learning Hub',
+      url: window.location.origin,
+    },
     url: window.location.origin,
-    logo: `${window.location.origin}/image.png`,
-    sameAs: [],
+    image: `${window.location.origin}/image.png`,
+    educationalLevel: 'Advanced',
+    coursePrerequisites: 'Basic understanding of machine learning and large language models',
     offers: {
       '@type': 'Offer',
       category: 'Educational Courses',
@@ -40,8 +46,8 @@ export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 antialiased text-slate-900 relative">
       <SEO
-        title="Home"
-        description="Transform your expertise into engaging online courses. Professional learning platform with interactive quizzes, exercises, and digital certificates."
+        title="Disaggregated Inference Course: Master LLM Serving Optimization"
+        description="Master disaggregated inference and LLM serving optimization techniques. Comprehensive course covering prefill-decode disaggregation, KV cache management, and distributed serving strategies."
         canonical={window.location.origin}
         structuredData={structuredData}
       />
