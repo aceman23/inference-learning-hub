@@ -98,25 +98,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ]);
 
       if (profileError) throw profileError;
-
-      const { data: courseData } = await supabase
-        .from('courses')
-        .select('id')
-        .eq('is_published', true)
-        .maybeSingle();
-
-      if (courseData) {
-        await supabase
-          .from('enrollments')
-          .insert([
-            {
-              user_id: data.user.id,
-              course_id: courseData.id,
-              status: 'active',
-              amount_paid: 0,
-            },
-          ]);
-      }
     }
   };
 
