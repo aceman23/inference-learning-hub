@@ -1,7 +1,9 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-Disallow: /admin
+
+# Block authenticated/private pages
+Disallow: /admin/
 Disallow: /dashboard
 Disallow: /course
 Disallow: /settings
@@ -9,4 +11,13 @@ Disallow: /payment
 Disallow: /payment-success
 Disallow: /certificate
 
-Sitemap: https://learnhub.com/sitemap.xml
+# Allow public pages
+Allow: /login
+Allow: /signup
+Allow: /forgot-password
+Allow: /pricing
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+
+Sitemap: https://yourdomain.com/sitemap.xml
