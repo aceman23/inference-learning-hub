@@ -26,7 +26,7 @@ export const Landing: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: 'Disaggregated Inference Course: Master LLM Serving Optimization',
-    description: 'Master disaggregated inference and LLM serving optimization techniques. Comprehensive course covering prefill-decode disaggregation, KV cache management, and distributed serving strategies.',
+    description: 'Master disaggregated inference for large language models. This comprehensive course teaches prefill/decode separation, KV cache optimization, and scalable LLM serving techniques. One-time $249 payment, progress tracking, and certificate included.',
     provider: {
       '@type': 'EducationalOrganization',
       name: 'Inference Learning Hub',
@@ -40,6 +40,8 @@ export const Landing: React.FC = () => {
       '@type': 'Offer',
       category: 'Educational Courses',
       availability: 'https://schema.org/InStock',
+      price: '249',
+      priceCurrency: 'USD',
     },
   };
 
@@ -47,7 +49,7 @@ export const Landing: React.FC = () => {
     <div className="min-h-screen bg-slate-50 antialiased text-slate-900 relative">
       <SEO
         title="Disaggregated Inference Course: Master LLM Serving Optimization"
-        description="Master disaggregated inference and LLM serving optimization techniques. Comprehensive course covering prefill-decode disaggregation, KV cache management, and distributed serving strategies."
+        description="Master disaggregated inference for large language models. This comprehensive course teaches prefill/decode separation, KV cache optimization, and scalable LLM serving techniques. One-time $249 payment, progress tracking, and certificate included."
         canonical={window.location.origin}
         structuredData={structuredData}
       />
