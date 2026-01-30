@@ -14,7 +14,20 @@ The payment flow is configured with a Stripe Payment Link. When users click "Enr
 
 ## Stripe Payment Link Configuration
 
-**Current Payment Link:** `https://buy.stripe.com/9B68wPcOa9h9cX20zw2wU0B`
+The app uses environment variables to manage Stripe payment links for different environments (test and production).
+
+### Environment Variables
+
+Configure these in your `.env` file:
+
+```
+VITE_STRIPE_PAYMENT_LINK_TEST=https://buy.stripe.com/test_xxxxx
+VITE_STRIPE_PAYMENT_LINK_PROD=https://buy.stripe.com/xxxxx
+```
+
+The app automatically selects the correct link based on the build mode:
+- Development/test mode uses `VITE_STRIPE_PAYMENT_LINK_TEST`
+- Production mode uses `VITE_STRIPE_PAYMENT_LINK_PROD`
 
 ### Important Stripe Dashboard Settings
 
@@ -31,14 +44,22 @@ To ensure the payment flow works correctly, configure these settings in your Str
 ## Prerequisites
 
 1. Stripe account at https://stripe.com
-2. Stripe Payment Link created for your course
+2. Stripe Payment Links created for both test and production
+3. Environment variables configured in `.env` file
 
 ## How to Update the Payment Link
 
-If you need to change the Stripe payment link, update it in `src/pages/Payment.tsx`:
+To change the Stripe payment links, update the values in your `.env` file:
 
+1. For test mode: Update `VITE_STRIPE_PAYMENT_LINK_TEST`
+2. For production: Update `VITE_STRIPE_PAYMENT_LINK_PROD`
+
+The payment page automatically constructs the URL with user information:
 ```typescript
-const stripeUrl = `https://buy.stripe.com/YOUR_NEW_LINK?client_reference_id=${user.id}&prefilled_email=${encodeURIComponent(user.email || '')}`;
+const stripePaymentLink = import.meta.env.MODE === 'production'
+  ? import.meta.env.VITE_STRIPE_PAYMENT_LINK_PROD
+  : import.meta.env.VITE_STRIPE_PAYMENT_LINK_TEST;
+const stripeUrl = `${stripePaymentLink}?client_reference_id=${user.id}&prefilled_email=${encodeURIComponent(user.email || '')}`;
 ```
 
 ## Payment Flow Details
