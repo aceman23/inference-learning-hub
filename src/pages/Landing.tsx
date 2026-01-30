@@ -482,10 +482,6 @@ export const Landing: React.FC = () => {
                 question: 'What makes this course different from free resources online?',
                 answer: 'While there are research papers and blog posts available, this course provides a structured, comprehensive curriculum that connects theory to practice. You get hands-on exercises, quizzes to test your knowledge, real-world implementation patterns, and a clear learning path - all in one place.',
               },
-              {
-                question: 'Can I try the course before purchasing?',
-                answer: 'Yes! You can login with the demo account (demo@learnhub.com / demo123) to explore the course content and interface before making a purchase decision.',
-              },
             ].map((item, index) => (
               <div
                 key={index}
