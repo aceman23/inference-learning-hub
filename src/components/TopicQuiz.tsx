@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, HelpCircle } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 interface QuizQuestion {
   question: string;
@@ -10,15 +12,86 @@ interface QuizQuestion {
 
 interface TopicQuizProps {
   questions: QuizQuestion[];
+  courseId: string;
+  sectionId: string;
+  topicId: string;
+  onAllAnswered?: (allAnswered: boolean) => void;
 }
 
-export default function TopicQuiz({ questions }: TopicQuizProps) {
+export default function TopicQuiz({
+  questions,
+  courseId,
+  sectionId,
+  topicId,
+  onAllAnswered
+}: TopicQuizProps) {
+  const { user } = useAuth();
   const [answers, setAnswers] = useState<(number | null)[]>(
     new Array(questions.length).fill(null)
   );
   const [showResults, setShowResults] = useState<boolean[]>(
     new Array(questions.length).fill(false)
   );
+  const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    if (user) {
+      loadAnsweredQuestions();
+    }
+  }, [user, courseId, sectionId, topicId]);
+
+  useEffect(() => {
+    const allAnswered = answeredQuestions.size === questions.length;
+    if (onAllAnswered) {
+      onAllAnswered(allAnswered);
+    }
+  }, [answeredQuestions, questions.length, onAllAnswered]);
+
+  const loadAnsweredQuestions = async () => {
+    if (!user) return;
+
+    try {
+      const { data } = await supabase
+        .from('quiz_answers')
+        .select('question_index')
+        .eq('user_id', user.id)
+        .eq('course_id', courseId)
+        .eq('section_id', sectionId)
+        .eq('topic_id', topicId)
+        .eq('answered', true);
+
+      if (data) {
+        const answered = new Set(data.map(d => d.question_index));
+        setAnsweredQuestions(answered);
+      }
+    } catch (error) {
+      console.error('Error loading quiz answers:', error);
+    }
+  };
+
+  const saveQuizAnswer = async (questionIndex: number) => {
+    if (!user) return;
+
+    try {
+      await supabase
+        .from('quiz_answers')
+        .upsert({
+          user_id: user.id,
+          course_id: courseId,
+          section_id: sectionId,
+          topic_id: topicId,
+          question_index: questionIndex,
+          answered: true,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id,course_id,section_id,topic_id,question_index'
+        });
+
+      setAnsweredQuestions(prev => new Set([...prev, questionIndex]));
+    } catch (error) {
+      console.error('Error saving quiz answer:', error);
+    }
+  };
 
   const handleAnswer = (questionIndex: number, answerIndex: number) => {
     const newAnswers = [...answers];
@@ -28,6 +101,8 @@ export default function TopicQuiz({ questions }: TopicQuizProps) {
     const newShowResults = [...showResults];
     newShowResults[questionIndex] = true;
     setShowResults(newShowResults);
+
+    saveQuizAnswer(questionIndex);
   };
 
   return (

@@ -308,6 +308,8 @@ export const CourseViewer: React.FC = () => {
                 />
               ) : currentSectionIndex === 1 && !prefillPhaseCompleted ? (
                 <PrefillPhaseFlow
+                  courseId={course.id}
+                  sectionId={currentSection.id}
                   onComplete={async () => {
                     setPrefillPhaseCompleted(true);
                     await markSectionComplete(currentSection.id);
@@ -319,6 +321,8 @@ export const CourseViewer: React.FC = () => {
                 />
               ) : currentSectionIndex === 2 && !module3Completed ? (
                 <Module3Viewer
+                  courseId={course.id}
+                  sectionId={currentSection.id}
                   onComplete={async () => {
                     setModule3Completed(true);
                     await markSectionComplete(currentSection.id);
@@ -330,6 +334,8 @@ export const CourseViewer: React.FC = () => {
                 />
               ) : currentSectionIndex === 3 && !module4Completed ? (
                 <Module4Viewer
+                  courseId={course.id}
+                  sectionId={currentSection.id}
                   onComplete={async () => {
                     setModule4Completed(true);
                     await markSectionComplete(currentSection.id);
@@ -341,6 +347,8 @@ export const CourseViewer: React.FC = () => {
                 />
               ) : currentSectionIndex === 4 && !module5Completed ? (
                 <Module5Viewer
+                  courseId={course.id}
+                  sectionId={currentSection.id}
                   onComplete={async () => {
                     setModule5Completed(true);
                     await markSectionComplete(currentSection.id);
@@ -352,6 +360,8 @@ export const CourseViewer: React.FC = () => {
                 />
               ) : currentSectionIndex === 5 && !module6Completed ? (
                 <Module6Viewer
+                  courseId={course.id}
+                  sectionId={currentSection.id}
                   onComplete={async () => {
                     setModule6Completed(true);
                     await markSectionComplete(currentSection.id);

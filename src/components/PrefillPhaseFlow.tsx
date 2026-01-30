@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, ChevronRight, ChevronLeft, Zap, Clock, ChevronDown, ChevronUp, Lightbulb, Code } from 'lucide-react';
+import { CheckCircle, ChevronRight, ChevronLeft, Zap, Clock, ChevronDown, ChevronUp, Lightbulb, Code, AlertCircle } from 'lucide-react';
 import TopicQuiz from './TopicQuiz';
 import { module2Topics, type Topic } from '../data/module2Topics';
 import {
@@ -12,13 +12,17 @@ import {
 
 interface PrefillPhaseFlowProps {
   onComplete: () => void;
+  courseId: string;
+  sectionId: string;
 }
 
-export default function PrefillPhaseFlow({ onComplete }: PrefillPhaseFlowProps) {
+export default function PrefillPhaseFlow({ onComplete, courseId, sectionId }: PrefillPhaseFlowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewedCards, setViewedCards] = useState<Set<number>>(new Set([0]));
   const [showReview, setShowReview] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
+  const [quizCompleted, setQuizCompleted] = useState<Record<number, boolean>>({});
+  const [showQuizWarning, setShowQuizWarning] = useState(false);
 
   const toggleSection = (index: number) => {
     const newExpanded = new Set(expandedSections);
@@ -31,8 +35,16 @@ export default function PrefillPhaseFlow({ onComplete }: PrefillPhaseFlowProps) 
   };
 
   const topics = module2Topics;
+  const isCurrentQuizCompleted = quizCompleted[currentIndex] || false;
 
   const handleNext = () => {
+    if (!isCurrentQuizCompleted) {
+      setShowQuizWarning(true);
+      setTimeout(() => setShowQuizWarning(false), 5000);
+      return;
+    }
+
+    setShowQuizWarning(false);
     if (currentIndex < topics.length - 1) {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
@@ -40,6 +52,10 @@ export default function PrefillPhaseFlow({ onComplete }: PrefillPhaseFlowProps) 
     } else {
       setShowReview(true);
     }
+  };
+
+  const handleQuizCompletion = (topicIndex: number, allAnswered: boolean) => {
+    setQuizCompleted(prev => ({ ...prev, [topicIndex]: allAnswered }));
   };
 
   const handlePrevious = () => {
@@ -286,11 +302,30 @@ export default function PrefillPhaseFlow({ onComplete }: PrefillPhaseFlowProps) 
           {/* Quiz Section */}
           {currentTopic.quiz && currentTopic.quiz.length > 0 && (
             <div className="border-t-2 border-slate-200 pt-8">
-              <TopicQuiz questions={currentTopic.quiz} />
+              <TopicQuiz
+                questions={currentTopic.quiz}
+                courseId={courseId}
+                sectionId={sectionId}
+                topicId={currentTopic.id}
+                onAllAnswered={(allAnswered) => handleQuizCompletion(currentIndex, allAnswered)}
+              />
             </div>
           )}
         </div>
       </div>
+
+      {/* Quiz Completion Warning */}
+      {showQuizWarning && !isCurrentQuizCompleted && (
+        <div className="mt-6 bg-amber-50 border-2 border-amber-400 rounded-xl p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold text-amber-900">Complete the Quiz First</p>
+            <p className="text-sm text-amber-800 mt-1">
+              Please answer all quick self-check questions before moving to the next topic.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center justify-between bg-white rounded-xl shadow-md p-6 border border-slate-200">
         <button
@@ -321,7 +356,12 @@ export default function PrefillPhaseFlow({ onComplete }: PrefillPhaseFlowProps) 
 
         <button
           onClick={handleNext}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition"
+          disabled={!isCurrentQuizCompleted}
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition ${
+            isCurrentQuizCompleted
+              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700'
+              : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+          }`}
         >
           {currentIndex === topics.length - 1 ? 'Review All' : 'Next'}
           <ChevronRight className="w-5 h-5" />

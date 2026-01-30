@@ -114,3 +114,15 @@ export interface Certificate {
   created_at: string;
   updated_at: string;
 }
+
+export interface QuizAnswer {
+  id: string;
+  user_id: string;
+  course_id: string;
+  section_id: string;
+  topic_id: string;
+  question_index: number;
+  answered: boolean;
+  created_at: string;
+  updated_at: string;
+}

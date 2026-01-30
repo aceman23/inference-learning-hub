@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, BookOpen, CheckCircle, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen, CheckCircle, Clock, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 import { module4Topics, Topic } from '../data/module4Topics';
 import TopicQuiz from './TopicQuiz';
 
 interface Module4ViewerProps {
   onComplete: () => void;
+  courseId: string;
+  sectionId: string;
 }
 
-export const Module4Viewer: React.FC<Module4ViewerProps> = ({ onComplete }) => {
+export const Module4Viewer: React.FC<Module4ViewerProps> = ({ onComplete, courseId, sectionId }) => {
   const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
   const [completedTopics, setCompletedTopics] = useState<Set<number>>(new Set());
   const [expandedInsights, setExpandedInsights] = useState<Set<number>>(new Set());
+  const [quizCompleted, setQuizCompleted] = useState<Record<number, boolean>>({});
+  const [showQuizWarning, setShowQuizWarning] = useState(false);
 
   const currentTopic = module4Topics[currentTopicIndex];
   const progress = Math.round(((currentTopicIndex + 1) / module4Topics.length) * 100);
+  const isCurrentQuizCompleted = quizCompleted[currentTopicIndex] || false;
 
   const toggleInsight = (topicIdx: number) => {
     const newExpanded = new Set(expandedInsights);
@@ -26,6 +31,13 @@ export const Module4Viewer: React.FC<Module4ViewerProps> = ({ onComplete }) => {
   };
 
   const handleNext = () => {
+    if (!isCurrentQuizCompleted) {
+      setShowQuizWarning(true);
+      setTimeout(() => setShowQuizWarning(false), 5000);
+      return;
+    }
+
+    setShowQuizWarning(false);
     const newCompleted = new Set(completedTopics);
     newCompleted.add(currentTopicIndex);
     setCompletedTopics(newCompleted);
@@ -36,6 +48,10 @@ export const Module4Viewer: React.FC<Module4ViewerProps> = ({ onComplete }) => {
     } else {
       onComplete();
     }
+  };
+
+  const handleQuizCompletion = (topicIndex: number, allAnswered: boolean) => {
+    setQuizCompleted(prev => ({ ...prev, [topicIndex]: allAnswered }));
   };
 
   const handlePrevious = () => {
@@ -201,10 +217,29 @@ export const Module4Viewer: React.FC<Module4ViewerProps> = ({ onComplete }) => {
 
           {/* Quiz Section - using TopicQuiz component like Module 2/3 */}
           <div className="pt-6 border-t-2 border-slate-200">
-            <TopicQuiz questions={currentTopic.quiz} />
+            <TopicQuiz
+              questions={currentTopic.quiz}
+              courseId={courseId}
+              sectionId={sectionId}
+              topicId={currentTopic.id}
+              onAllAnswered={(allAnswered) => handleQuizCompletion(currentTopicIndex, allAnswered)}
+            />
           </div>
         </div>
       </div>
+
+      {/* Quiz Completion Warning */}
+      {showQuizWarning && !isCurrentQuizCompleted && (
+        <div className="mt-6 bg-amber-50 border-2 border-amber-400 rounded-xl p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="font-semibold text-amber-900">Complete the Quiz First</p>
+            <p className="text-sm text-amber-800 mt-1">
+              Please answer all quick self-check questions before moving to the next topic.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Navigation Buttons - matches Module 2/3 style */}
       <div className="flex items-center justify-between mt-8 bg-white rounded-xl shadow-md p-6 border border-slate-200">
@@ -223,7 +258,12 @@ export const Module4Viewer: React.FC<Module4ViewerProps> = ({ onComplete }) => {
 
         <button
           onClick={handleNext}
-          className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition shadow-sm"
+          disabled={!isCurrentQuizCompleted}
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition shadow-sm ${
+            isCurrentQuizCompleted
+              ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+              : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+          }`}
         >
           {currentTopicIndex === module4Topics.length - 1 ? 'Complete Module' : 'Next Topic'}
           <ChevronRight className="w-5 h-5" />
