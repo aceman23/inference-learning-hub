@@ -113,6 +113,7 @@ export default function ObjectivesFlow({ onComplete }: ObjectivesFlowProps) {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
       setViewedCards((prev) => new Set([...prev, nextIndex]));
+      window.scrollTo(0, 0);
     } else {
       setShowReview(true);
     }
@@ -121,6 +122,7 @@ export default function ObjectivesFlow({ onComplete }: ObjectivesFlowProps) {
   const handlePrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -128,6 +130,7 @@ export default function ObjectivesFlow({ onComplete }: ObjectivesFlowProps) {
     setCurrentIndex(index);
     setViewedCards((prev) => new Set([...prev, index]));
     setShowReview(false);
+    window.scrollTo(0, 0);
   };
 
   const allViewed = viewedCards.size === objectives.length;

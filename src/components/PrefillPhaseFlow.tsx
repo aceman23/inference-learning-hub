@@ -49,6 +49,7 @@ export default function PrefillPhaseFlow({ onComplete, courseId, sectionId }: Pr
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
       setViewedCards((prev) => new Set([...prev, nextIndex]));
+      window.scrollTo(0, 0);
     } else {
       setShowReview(true);
     }
@@ -61,6 +62,7 @@ export default function PrefillPhaseFlow({ onComplete, courseId, sectionId }: Pr
   const handlePrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -68,6 +70,7 @@ export default function PrefillPhaseFlow({ onComplete, courseId, sectionId }: Pr
     setCurrentIndex(index);
     setViewedCards((prev) => new Set([...prev, index]));
     setShowReview(false);
+    window.scrollTo(0, 0);
   };
 
   const allViewed = viewedCards.size === topics.length;
